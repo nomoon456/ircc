@@ -1,0 +1,21 @@
+/* 
+** Fonction pour créer un socket
+*/
+socket(int domain, int type, int protocol) {}
+
+/*
+** Fonction pour envoyer des messages pour le socket
+*/
+send(int socket, char *buffer, int len, int flags) {}
+
+//******************************
+ERR_NEEDMOREPARAMS -> doit afficher "<command> : Not enough parameters"
+nous affichons -> "Not enough parameters", sans <command>
+il faut trouver une solution pour que dans Replies.hpp nous arrivions a savoir quel commande appel la reply en question
+afin de pouvoir la print en string.
+//******************************
+
+//*****************************
+ERR_NOSUCHNICK -> affiche sur irssi: <nick>: No such nick/channel
+nous affichons -> No such nick/channel: No such nick/channel
+//*****************************
