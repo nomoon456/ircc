@@ -120,24 +120,28 @@ void irc::User::registration()
 	setStatus(irc::REGISTERED);
 }
 
+///msg #class01 salut
+//msg #class01,abc1 salut
+
+
 void irc::User::processReply()
 {
 	if (checkBit(1) && checkBit(2) && !checkBit(0))
 	{
-		std::cout << "1111111111111" << std::endl;
+		// std::cout << "1111111111111" << std::endl;
 		this->setStatus(irc::LEAVE);
 		this->addWaitingSend((std::string)"ERROR :Need password" + CRLF);
 	}
 	else if (_mandatory == 7 && getStatus() != REGISTERED && getStatus() != ONLINE && getStatus() != LEAVE && getStatus() != ERROR)
 	{
-		std::cout << "2222222222" << std::endl;
+		// std::cout << "2222222222" << std::endl;
 		registration();
 	}
 	// Bufferize toutes les réponses pour les envoyer avec send()
 	// std::cout << "[SERVER] Réponse du server" << std::endl;
 	std::string buffer;
 	std::vector<std::string>::iterator it(_waitingSend.begin());
-	std::cout << "333333333333" << std::endl;
+	// std::cout << "333333333333" << std::endl;
 	for (; it != _waitingSend.end(); it++)
 	{
 		std::cout << (*it) << std::endl;
@@ -145,11 +149,11 @@ void irc::User::processReply()
 	}
 	if (buffer.length())
 		send(getFd(), buffer.c_str(), buffer.length(), 0);
-	std::cout << "444444444444" << std::endl;
+	// std::cout << "444444444444" << std::endl;
 	_cmds.erase(_cmds.begin(), _cmds.end());
 	_waitingSend.erase(_waitingSend.begin(), _waitingSend.end());
 	buffer.clear();
-	std::cout << "55555555555" << std::endl;
+	// std::cout << "55555555555" << std::endl;
 }
 
 
