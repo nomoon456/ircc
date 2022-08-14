@@ -196,6 +196,11 @@ void irc::User::getMessages()
 			}
 		}
 	}
+	std::vector<Command *>::iterator its9(_cmds.begin());
+	for (; its9 != _cmds.end(); its9++)
+	{
+		delete *its9;
+	}
 }
 
 void irc::User::setBits(int index){_mandatory = _mandatory | (1 << index);}
@@ -232,11 +237,9 @@ void irc::User::broadcast(irc::Channel *chan, std::string message, irc::User *wi
 
 irc::User::~User()
 {
-	std::vector<Command *>::iterator it(_cmds.begin());
-	for (; it != _cmds.end(); it++)
-		delete (*it);
-	std::cout << "EHEHHEHEHEHHEHEHHEHEHE: " << _cmds.empty() << std::endl;
-	// delete _cmds;
+	// std::vector<Command *>::iterator it(_cmds.begin());
+	// for (; it != _cmds.end(); it++)
+	// 	delete (*it);
 };
 
 void irc::User::setCmd()
