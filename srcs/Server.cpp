@@ -161,7 +161,7 @@ void irc::Server::acceptClient()
 	if ((socketClient = accept(this->_pollFds[0].fd, (struct sockaddr *)&addrClient, &csize)) < 0)
 		DisplayError("Accept: ");
 
-	this->_users[socketClient] = new User(this, socketClient, addrClient);
+	this->_users[socketClient] = new User(this, socketClient, addrClient); //want to free
 	//----met le premier user du serveur OPERATOR------
 	if (this->_users.size() == 1)
 		this->_users[socketClient]->setOper(true);
@@ -191,8 +191,9 @@ void irc::Server::runtime()
 	{
 		if ((*it).second->getStatus() == LEAVE)
 			this->deleteUser((*(it++)).second->getFd());
-		else
+		else {
 			(*(it++)).second->processReply();
+		}
 		if (!_users.size())
 			break ;
 	}

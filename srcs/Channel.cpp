@@ -233,4 +233,6 @@ irc::Channel::Channel(bool type, std::string name, irc::User* ope, std::string p
 	this->_operator.push_back(ope);
 }
 
-irc::Channel::~Channel() {};
+irc::Channel::~Channel() {
+	
+};

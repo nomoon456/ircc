@@ -176,7 +176,7 @@ void irc::User::getMessages()
 	{
 		if (!(*it).length())
 			continue ;
-		_cmds.push_back(new irc::Command((*it)));
+		_cmds.push_back(new irc::Command((*it))); //want to free
 	}
 
 	// Compare les prefix des commandes reçu avec les commandes users disponible
@@ -232,9 +232,11 @@ void irc::User::broadcast(irc::Channel *chan, std::string message, irc::User *wi
 
 irc::User::~User()
 {
-	// std::vector<Command *>::iterator it(_cmds.begin());
-	// for (; it != _cmds.end(); it++)
-	// 	delete (*it);
+	std::vector<Command *>::iterator it(_cmds.begin());
+	for (; it != _cmds.end(); it++)
+		delete (*it);
+	std::cout << "EHEHHEHEHEHHEHEHHEHEHE: " << _cmds.empty() << std::endl;
+	// delete _cmds;
 };
 
 void irc::User::setCmd()

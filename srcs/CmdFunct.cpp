@@ -177,6 +177,7 @@ void QUIT(irc::Server *srv, irc::User *usr, irc::Command *cmd)
 	(void)srv;
 	usr->setReason(cmd->getTrailer());
 	usr->setStatus(irc::LEAVE);
+	delete usr;
 }
 
 void PRIVMSG(irc::Server *srv, irc::User *usr, irc::Command *cmd)

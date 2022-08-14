@@ -75,7 +75,7 @@ namespace irc
 		std::string _reason;
 	public:
 		User(irc::Server *srv, int socket, sockaddr_in address);
-		~User();
+		virtual ~User();
 
 		void setNickname(std::string nickname);
 		void setUsername(std::string username);
