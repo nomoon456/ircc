@@ -9,13 +9,20 @@ socket(int domain, int type, int protocol) {}
 send(int socket, char *buffer, int len, int flags) {}
 
 //******************************
-ERR_NEEDMOREPARAMS -> doit afficher "<command> : Not enough parameters"
-nous affichons -> "Not enough parameters", sans <command>
-il faut trouver une solution pour que dans Replies.hpp nous arrivions a savoir quel commande appel la reply en question
-afin de pouvoir la print en string.
-//******************************
+nc localhost 6667 test
+Buffer: 
+CAP LS
+PASS test
+NICK user
+USER elbouju elbouju localhost :Elliot BOUJU
 
-//*****************************
-ERR_NOSUCHNICK -> affiche sur irssi: <nick>: No such nick/channel
-nous affichons -> No such nick/channel: No such nick/channel
+Buffer: MODE user +i
+Buffer: PING user
+Buffer: JOIN #class01
+Buffer: MODE #class01
+Buffer: PRIVMSG #class01 :salut
+Buffer: PRIVMSG user :salut
+NOTICE #class01 :test
+Buffer: PART #class01
+Buffer: QUIT :leaving
 //*****************************

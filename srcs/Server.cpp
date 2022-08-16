@@ -216,8 +216,6 @@ void irc::Server::createChan(std::string name, irc::User* usr)
 	_channels.push_back(Channel(getType(name), name, usr));
 
 	usr->addWaitingSend(":" + usr->getClient() + " JOIN :" + _channels.back().getName() + CRLF);
-	// usr->reply(331, &_channels.back());
-	// usr->addWaitingSend(":" + usr->getClient() + " MODE :" + name + " +" + _channels.back().getModes() + CRLF);
 	usr->reply(353, &_channels.back());
 	usr->reply(366, &_channels.back());
 
@@ -227,10 +225,6 @@ void irc::Server::createChan(std::string name, irc::User* usr)
 void irc::Server::joinChan(irc::Channel* chan, irc::User* usr, std::string password)
 {
 	(void)password;
-	// if (chan->getModes().find('l') && chan->getCapacity() >= _chanLimit)
-	// 	usr->reply(475, chan); return ;  //ERR_CHANNELISFULL
-	// if (chan->getModes().find('k') && password.compare(chan->getPassword()))
-	// 	usr->reply(471, chan); return ;  //ERR_BADCHANNELKEY
 	if (chan->findMode("i") == true) // si channel sur invitation
 	{
 		if (usr->getOperator() == false)
@@ -282,15 +276,6 @@ irc::Server::~Server()
     close(this->_socketServer);
 }
 
-// irc::Server::~Server()
-// {
-// 	for (std::vector<pollfd>::iterator it(_pollFds.begin()); it != _pollFds.end(); it++)
-// 		close((*it).fd);
-// 	for (std::map<int, irc::User *>::iterator itu(_users.begin()); itu != _users.end(); itu++)
-// 		deleteUser((*itu).second->getFd());
-// 	close(this->_socketServer);
-// }
-
 void irc::Server::broadcast(std::string message)
 {
 	std::map<int, User *> users(this->getUsers());
@@ -314,6 +299,7 @@ void irc::Server::deleteUser(int fd)
 		(*chit++).removeUser(_users[fd], (" QUIT :" + _users[fd]->getReason()));
 	_users[fd]->addWaitingSend(":" + _users[fd]->getClient() + " QUIT :" + _users[fd]->getReason() + CRLF);
 	_users[fd]->processReply();
+	delete _users[fd];
 	_users.erase(fd);
 	close(fd);
 }

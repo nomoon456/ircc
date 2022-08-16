@@ -19,70 +19,9 @@ void PASS(irc::Server *srv, irc::User *usr, irc::Command *cmd)
 		usr->reply(464);		// ERR_PASSWDMISMATCH
 }
 
-// bool checkNickname(irc::Server *srv, std::string nickname)
-// {
-// 	std::map<int, irc::User *> Users(srv->getUsers());
-// 	std::map<int, irc::User *>::iterator it(Users.begin());
-// 	for (; it != Users.end(); it++)
-// 	{
-// 		if (!nickname.compare((*it).second->getNickname()))
-// 			return (false);
-// 	}
-// 	return (true);
-// }
-
-// bool isLetter(char c) { return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'); }
-// bool isSpecial(char c) { return (c >= '[' && c <= '`') || (c >= '{' && c <= '}'); }
-// bool isDigit(char c) { return (c >= '0' && c <= '9'); }
-
-// bool checkChar(std::string nickname)
-// {
-// 	if (nickname.length() > 9)
-// 		return (false);
-// 	std::string::iterator it(nickname.begin());
-// 	std::string::iterator ite(nickname.end());
-// 	for (; it != ite; ++it)
-// 		if (!isalnum((*it)) && (*it) != '_')
-// 			return (false);
-// 	return (true);
-// }
-
-// void NICK(irc::Server *srv, irc::User *usr, irc::Command *cmd)
-// {
-// 	// std::cout << "[" << srv->getDatatime() << "]" << std::endl;
-// 	std::cout << "NICK Funct" << std::endl;
-// 	std::cout << "Nickname: " << cmd->getParams()[0]  << "\n" << std::endl;
-// 	if (!cmd->getParams().size())
-// 	{
-// 		usr->reply(431);  // ERR_NONICKNAMEGIVEN
-// 		usr->setStatus(irc::ERROR);
-// 	}
-// 	else if (!checkChar(cmd->getParams()[0]))
-// 	{
-// 		usr->reply(432);  // ERR_ERRONEUSNICKNAME
-// 		usr->setStatus(irc::ERROR);
-// 	}
-// 	else if (!checkNickname(srv, cmd->getParams()[0]))
-// 	{
-// 		usr->setNickname(cmd->getParams()[0]);
-// 		usr->reply(433);  // ERR_NICKNAMEINUSE
-// 		usr->setStatus(irc::ERROR);
-// 		return ;
-// 	}
-// 	if (usr->getStatus() == irc::REGISTERED || usr->getStatus() == irc::ONLINE)
-// 		usr->addWaitingSend(":" + usr->getClient() + " " + "NICK :" + cmd->getParams()[0] + CRLF);
-// 	usr->setNickname(cmd->getParams()[0]);
-// 	usr->setBits(1);
-// 	if (usr->checkBit(0))
-// 		usr->setStatus(irc::AUTHENTICATED);
-// }
-
 void USER(irc::Server *srv, irc::User *usr, irc::Command *cmd)
 {
 	usr->setBits(2);
-	// std::cout << "USER Funct" << std::endl;
-	// std::cout << "Username: " << cmd->getParams()[0] << std::endl;
-	// std::cout << "Realname: " << cmd->getTrailer() << std::endl;
 	if (cmd->getParams().size() < 3)
 		usr->reply(461);
 	else if (usr->getStatus() == irc::REGISTERED)
@@ -177,12 +116,10 @@ void QUIT(irc::Server *srv, irc::User *usr, irc::Command *cmd)
 	(void)srv;
 	usr->setReason(cmd->getTrailer());
 	usr->setStatus(irc::LEAVE);
-	delete usr;
 }
 
 void PRIVMSG(irc::Server *srv, irc::User *usr, irc::Command *cmd)
 {
-	std::cout << "AHAHHAHAHHA MIAM MIAM" << std::endl;
 	std::vector<std::string> Targets = split(cmd->getParams()[0], ",");
 	std::string msg = cmd->getTrailer();
 
@@ -198,7 +135,6 @@ void PRIVMSG(irc::Server *srv, irc::User *usr, irc::Command *cmd)
 	{
 		if ((chan = findChan(srv, (*it))) != nullptr) // si channel diffusion message dans le channel
 		{
-			std::cout << "OK HELLO GUYW" << std::endl;
 			//si usr n'est pas dans le channel et que le chan est mode +n et qu'il n'est pas ops
 			if (chan->knowUser(usr) == false && chan->findMode("n") == true && usr->getOperator() == false)
 				usr->reply(404, chan);
@@ -207,7 +143,6 @@ void PRIVMSG(irc::Server *srv, irc::User *usr, irc::Command *cmd)
 		}
 		else // sinon msg prive to user
 		{
-			std::cout << "OK HELLO GYAAL" << std::endl;
 			userTarget = srv->getUserByNick(*it);
 			if (userTarget != nullptr)
 			{
@@ -298,7 +233,6 @@ void OPER(irc::Server *srv, irc::User *usr, irc::Command *cmd)
 	else if (!srv->getOperName().compare(cmd->getParams()[0]) && !srv->getOperPassword().compare(cmd->getParams()[1]))
 	{
 		usr->setOper(true);
-//		usr->setMode("+o");
 		usr->reply(381);
 	}
 	else
@@ -339,10 +273,6 @@ void KICK(irc::Server *srv, irc::User *usr, irc::Command *cmd)
 			usr->reply(441, chan);
 		else
 		{
-			//mode operator channel a rajouter
-			// si n'est pas operator
-			//	usr->reply(482, chan);
-			//return;
 			chan->kickUser(usr, target, reason);
 		}
 	}

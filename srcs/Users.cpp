@@ -100,7 +100,6 @@ std::string irc::User::getReplies(int code, irc::Channel *chan)
 	while (scode.length() < 3)
 		scode = "0" + scode;
 	std::string toSent(":" + getClient() + " " + scode + " " + getNickname() + " " + _rpl.find(code)->second(getServer(), *this, chan));
-	// std::cout << toSent << std::endl;
 	return(toSent);
 }
 
@@ -120,28 +119,21 @@ void irc::User::registration()
 	setStatus(irc::REGISTERED);
 }
 
-///msg #class01 salut
-//msg #class01,abc1 salut
-
-
 void irc::User::processReply()
 {
 	if (checkBit(1) && checkBit(2) && !checkBit(0))
 	{
-		// std::cout << "1111111111111" << std::endl;
 		this->setStatus(irc::LEAVE);
 		this->addWaitingSend((std::string)"ERROR :Need password" + CRLF);
 	}
 	else if (_mandatory == 7 && getStatus() != REGISTERED && getStatus() != ONLINE && getStatus() != LEAVE && getStatus() != ERROR)
 	{
-		// std::cout << "2222222222" << std::endl;
 		registration();
 	}
 	// Bufferize toutes les réponses pour les envoyer avec send()
 	// std::cout << "[SERVER] Réponse du server" << std::endl;
 	std::string buffer;
 	std::vector<std::string>::iterator it(_waitingSend.begin());
-	// std::cout << "333333333333" << std::endl;
 	for (; it != _waitingSend.end(); it++)
 	{
 		std::cout << (*it) << std::endl;
@@ -149,11 +141,9 @@ void irc::User::processReply()
 	}
 	if (buffer.length())
 		send(getFd(), buffer.c_str(), buffer.length(), 0);
-	// std::cout << "444444444444" << std::endl;
 	_cmds.erase(_cmds.begin(), _cmds.end());
 	_waitingSend.erase(_waitingSend.begin(), _waitingSend.end());
 	buffer.clear();
-	// std::cout << "55555555555" << std::endl;
 }
 
 
@@ -184,12 +174,8 @@ void irc::User::getMessages()
 	for (; its != _cmds.end(); its++)
 	{
 		std::map<std::string, cmd_funct>::iterator itm(_funct.begin());
-		// std::cout << "Get Message->prefix: " << (*its)->getPrefix() << std::endl;
 		for(; itm != _funct.end(); itm++)
 		{
-			// std::cout << "(*itm).first: " << (*itm).first << std::endl;
-			// std::cout << "(*its)->getPrefix(): " << (*its)->getPrefix() << std::endl;
-			// std::cout << (*itm).first <<  " " << (*itm).second << " ;) " << std::endl;
 			if ((*itm).first.compare((*its)->getPrefix()) == 0)
 			{
 				(*itm).second(getServer(), this, (*its));
@@ -217,9 +203,6 @@ irc::User::User(irc::Server *srv,int socket, sockaddr_in address) : _server(srv)
 	setHostname(hostname);
 	setCmd();
 	setReplies();
-
-	// printf("hostname: %s\n", hostname);
-	// printf("hostaddr: %s\n", _hostaddr.c_str());
 };
 
 void irc::User::broadcast(irc::Channel *chan, std::string message, irc::User *without)
@@ -237,9 +220,6 @@ void irc::User::broadcast(irc::Channel *chan, std::string message, irc::User *wi
 
 irc::User::~User()
 {
-	// std::vector<Command *>::iterator it(_cmds.begin());
-	// for (; it != _cmds.end(); it++)
-	// 	delete (*it);
 };
 
 void irc::User::setCmd()

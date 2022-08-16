@@ -33,7 +33,6 @@ irc::User* findUserSrv(irc::Server *srv, std::string toFind)
 */
 irc::User* findUserChan(std::vector<irc::User *> list, std::string toFind)
 {
-	// std::cout << "FindUser->toFind: " << toFind << std::endl;
 	std::vector<irc::User *>::iterator it(list.begin());
 	for (; it != list.end(); it++)
 	{
